@@ -32,7 +32,7 @@ Import `DMCustomModalViewController` in your project.
     
 ###Part screen
 
-
+![image](https://raw.github.com/Dimillian/DMCustomModalViewController/master/screen1.png)
     ModalRootViewController *root = [[ModalRootViewController alloc]initWithNibName:nil bundle:nil];
     _partModal = [[DMCustomModalViewController alloc]initWithRootViewController:root
                                                                                    parentViewController:self];
