@@ -21,9 +21,9 @@ You should not subclass it, it act as a container view controller that you can d
 
 **TL;DR:** Look at the example provided. 
 
-Add DMCustomModalViewController.h and .m from the **classes/** folder to your Xcode project.
-
-Import `DMCustomModalViewController.h`where you want to use it. 
+1. Add DMCustomModalViewController.h and .m from the **classes/** folder to your Xcode project.
+2. Add QuartzCore.framework to "Link Binary With Libraries" (.xcodeproj -> Build Phases)
+3. Import `DMCustomModalViewController.h`where you want to use it. 
 
 ###Full Screen
 
