@@ -11,6 +11,5 @@
 
 @interface ViewController : UIViewController <DMCustomViewControllerDelegate>
 
-@property (nonatomic, strong) DMCustomModalViewController *partModal;
-@property (nonatomic, strong) DMCustomModalViewController *fullScreenModal;
+@property (nonatomic, strong) DMCustomModalViewController *modal;
 @end

@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, DMCustomModalViewControllerPresentationStyle) {
 /**
  If you set the DMCustomModalViewControllerPresentationStyle to DMCustomModalViewControllerPresentPartScreen you need
  to set this value to define how much of the modal view you want to show.
- No default value is set
+ The default value is 400.0
  */
 @property (nonatomic) CGFloat rootViewControllerHeight;
 /**
@@ -43,12 +43,19 @@ typedef NS_ENUM(NSInteger, DMCustomModalViewControllerPresentationStyle) {
  The default value is 0.30
  */
 @property (nonatomic) CGFloat animationSpeed;
-/*
+/**
  This value is used when aplying CGAffineTransformScale to the parentViewController view 
  for the modal presenting animation. Affect the recoil effect.
  The default value is 0.80
  */
 @property (nonatomic) CGFloat parentViewScaling;
+
+/**
+ This value is used when scaling the parent view, you can define how much the parent view Y axis
+ will be modified when scaled.
+ The default value is 0.0 so the Y axis is not modified during the scaling
+ */
+@property (nonatomic) CGFloat parentViewYPath;
 
 /**
  When the presentation style is in DMCustomModalViewControllerPresentPartScreen you can tap

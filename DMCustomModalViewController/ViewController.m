@@ -19,17 +19,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [button setFrame:CGRectMake(10, 100, 150, 100)];
-    [button setTitle:@"Present modal part" forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(showModal) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button];
+    [self setupTestUI];
     
-    UIButton *button2 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [button2 setFrame:CGRectMake(165, 100, 150, 100)];
-    [button2 setTitle:@"Present modal full" forState:UIControlStateNormal];
-    [button2 addTarget:self action:@selector(showModalFull) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:button2];
+    ModalRootViewController *root = [[ModalRootViewController alloc]initWithNibName:nil bundle:nil];
+    _modal = [[DMCustomModalViewController alloc]initWithRootViewController:root
+                                                       parentViewController:self];
 
     
 	// Do any additional setup after loading the view, typically from a nib.
@@ -42,27 +36,45 @@
 
 }
 
+- (void)onScalingSlider:(id)sender
+{
+    UISlider *slider = (UISlider *)sender;
+    [self.modal setParentViewScaling:slider.value];
+}
+
+- (void)onAnimationSpeedSlider:(id)sender
+{
+    UISlider *slider = (UISlider *)sender;
+    [self.modal setAnimationSpeed:slider.value];
+}
+
+- (void)onParentViewYPathSlider:(id)sender
+{
+    UISlider *slider = (UISlider *)sender;
+    [self.modal setParentViewYPath:slider.value];
+}
+
+- (void)onModalHeightSlider:(id)sender
+{
+    UISlider *slider = (UISlider *)sender;
+    [self.modal setRootViewControllerHeight:slider.value];
+}
+
 - (void)showModal
 {
-    ModalRootViewController *root = [[ModalRootViewController alloc]initWithNibName:nil bundle:nil];
-    _partModal = [[DMCustomModalViewController alloc]initWithRootViewController:root
-                                                                                   parentViewController:self];
-    [self.partModal setDelegate:self];
-    self.partModal.rootViewControllerHeight = 350;
-    [self.partModal presentRootViewControllerWithPresentationStyle:DMCustomModalViewControllerPresentPartScreen controllercompletion:^{
+    [self.modal setDelegate:self];
+    [self.modal presentRootViewControllerWithPresentationStyle:DMCustomModalViewControllerPresentPartScreen
+                                          controllercompletion:^{
         
     }];
 }
 
 - (void)showModalFull
 {
-    ModalRootViewController *root = [[ModalRootViewController alloc]initWithNibName:nil bundle:nil];
-    _fullScreenModal = [[DMCustomModalViewController alloc]initWithRootViewController:root
-                                                                                   parentViewController:self];
-    [self.fullScreenModal setDelegate:self];
-    [self.fullScreenModal setAnimationSpeed:0.25];
-    [self.fullScreenModal setParentViewScaling:0.60];
-    [self.fullScreenModal presentRootViewControllerWithPresentationStyle:DMCUstomModalViewControllerPresentFullScreen controllercompletion:^{
+    [self.modal setDelegate:self];
+    [self.modal setAnimationSpeed:0.25];
+    [self.modal presentRootViewControllerWithPresentationStyle:DMCUstomModalViewControllerPresentFullScreen
+                                          controllercompletion:^{
         
     }];
 }
@@ -77,6 +89,75 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (void)setupTestUI
+{
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [button setFrame:CGRectMake(10, 100, 150, 100)];
+    [button setTitle:@"Present modal part" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(showModal) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
+    
+    UIButton *button2 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [button2 setFrame:CGRectMake(165, 100, 150, 100)];
+    [button2 setTitle:@"Present modal full" forState:UIControlStateNormal];
+    [button2 addTarget:self action:@selector(showModalFull) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button2];
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 235, self.view.frame.size.width - 10, 20)];
+    [label setText:@"parent view scaling"];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [label setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:label];
+    UISlider *slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 250, self.view.frame.size.width - 10, 30)];
+    [slider addTarget:self action:@selector(onScalingSlider:) forControlEvents:UIControlEventValueChanged];
+    [slider setMaximumValue:1.0];
+    [slider setMinimumValue:0.0];
+    [slider setValue:0.80 animated:YES];
+    [self.view addSubview:slider];
+    
+    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 295, self.view.frame.size.width - 10, 20)];
+    [label setText:@"Animation Speed"];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [label setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:label];
+    
+    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 310, self.view.frame.size.width - 10, 30)];
+    [slider addTarget:self action:@selector(onAnimationSpeedSlider:) forControlEvents:UIControlEventValueChanged];
+    [slider setMaximumValue:1.0];
+    [slider setMinimumValue:0.0];
+    [slider setValue:0.30 animated:YES];
+    [self.view addSubview:slider];
+    
+    
+    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 350, self.view.frame.size.width - 10, 20)];
+    [label setText:@"Parent view Y path"];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [label setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:label];
+    
+    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 375, self.view.frame.size.width - 10, 30)];
+    [slider addTarget:self action:@selector(onParentViewYPathSlider:) forControlEvents:UIControlEventValueChanged];
+    [slider setMaximumValue:100.0];
+    [slider setMinimumValue:0.0];
+    [slider setValue:0.0 animated:YES];
+    [self.view addSubview:slider];
+    
+    
+    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 420, self.view.frame.size.width - 10, 20)];
+    [label setText:@"Modal height"];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [label setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:label];
+    
+    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 435, self.view.frame.size.width - 10, 30)];
+    [slider addTarget:self action:@selector(onModalHeightSlider:) forControlEvents:UIControlEventValueChanged];
+    [slider setMaximumValue:500.0];
+    [slider setMinimumValue:0.0];
+    [slider setValue:400 animated:YES];
+    [self.view addSubview:slider];
 }
 
 @end

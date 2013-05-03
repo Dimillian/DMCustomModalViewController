@@ -42,6 +42,8 @@ const CGFloat kDeep = 0.80;
         _animationSpeed = 0.30;
         _tapParentViewToClose = YES;
         _parentViewScaling = kDeep;
+        _parentViewYPath = 0.0;
+        _rootViewControllerHeight = 400.0;
     }
     return self;
 }
@@ -95,6 +97,9 @@ const CGFloat kDeep = 0.80;
     void (^scaleView) (void) = ^{
         CGAffineTransform xForm = primaryView.transform;
         primaryView.transform = CGAffineTransformScale(xForm, _parentViewScaling, _parentViewScaling);
+        CGRect frame = primaryView.frame;
+        frame.origin.y -= self.parentViewYPath;
+        [primaryView setFrame:frame];
     };
     primaryView.window.backgroundColor = [UIColor blackColor];
     [UIView animateWithDuration:_animationSpeed
@@ -164,6 +169,9 @@ const CGFloat kDeep = 0.80;
     void (^scaleView) (void) = ^{
         [self.overlayView setAlpha:0.0];
         primaryView.transform =  CGAffineTransformScale(primaryView.transform, 1.0, 1.0);
+        CGRect frame = primaryView.frame;
+        frame.origin.y += self.parentViewYPath;
+        [primaryView setFrame:frame];
     };
     
     void (^animationBlock) (void) = ^{

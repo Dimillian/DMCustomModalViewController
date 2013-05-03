@@ -77,7 +77,14 @@ I know you should not dismiss your modal view from within itself, but I'll provi
 You can customize the animation speed by setting the property `CGFloat animationSpeed` before presenting the modal view controller
 The default value is 0.30
 
-You can also customize the scaling of the parent controller view when the modal view is presented. It will affect the recoil effect. For that modify the property `CGFloat parentViewScaling` the default value is 0.80
+You can also customize the scaling of the parent controller view when the modal view is presented. It will affect the recoil effect. For that modify the property `CGFloat parentViewScaling` the default value is 0.80.
+
+Also by default when you tap on the parent view when the modal is not presented full screen it will close it, you can turn it off by setting `tapParentViewToClose` to `NO`.
+
+There are some other properties for you to play with.
+
+The example provide sliders on the UI to better understand the effect of each property.
+Just run it in the simulator :)
 
 ## Licensing 
 Copyright (C) 2013 by Thomas Ricouard. 

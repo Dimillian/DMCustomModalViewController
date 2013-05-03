@@ -286,10 +286,12 @@
 		53595AAC1733E8E3002CBF6B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Thomas Ricouard (7MB55D6BJ5)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DMCustomModalViewController/DMCustomModalViewController-Prefix.pch";
 				INFOPLIST_FILE = "DMCustomModalViewController/DMCustomModalViewController-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9F0920A1-85BA-4CFB-8944-E3D572E65781";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -297,10 +299,12 @@
 		53595AAD1733E8E3002CBF6B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Thomas Ricouard";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DMCustomModalViewController/DMCustomModalViewController-Prefix.pch";
 				INFOPLIST_FILE = "DMCustomModalViewController/DMCustomModalViewController-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "FC8AA963-9C00-4F33-AFB2-61338F6364EE";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -324,6 +328,7 @@
 				53595AAD1733E8E3002CBF6B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
