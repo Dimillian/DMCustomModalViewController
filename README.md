@@ -1,8 +1,5 @@
 DMCustomModalViewController
 ===========================
-**Beta**: This class is only a tiny part of what I want to do, later I'll provide a better implementation and interface, more animations, customizations etc…
-Today it works but not provide all the options and nice feature I want to.
-
 DMCustomModalViewController is a  `UIViewController` subclass which take a root view controller and present it modally with a nice animation (a la gmail).
 
 You should not subclass it, it act as a container view controller that you can directly instantiate and use. 
@@ -64,7 +61,8 @@ You could simply do something like this
     	}];
 	}
 	
-I know you should not dismiss your modal view from within itself, but I'll provide a better implementation with a later version. 
+I know you should not dismiss your modal view from within itself, but I'll provide a better implementation with a future version. 
+
 
 ###Delegate
 
@@ -74,6 +72,12 @@ I know you should not dismiss your modal view from within itself, but I'll provi
 	@optional
 	- (void)customModalViewControllerDidDismiss:(DMCustomModalViewController *)modalViewController;
 	@end
+
+###Customization
+You can customize the animation speed by setting the property `CGFloat animationSpeed` before presenting the modal view controller
+The default value is 0.30
+
+You can also customize the scaling of the parent controller view when the modal view is presented. It will affect the recoil effect. For that modify the property `CGFloat parentViewScaling` the default value is 0.80
 
 ## Licensing 
 Copyright (C) 2013 by Thomas Ricouard. 

@@ -60,6 +60,8 @@
     _fullScreenModal = [[DMCustomModalViewController alloc]initWithRootViewController:root
                                                                                    parentViewController:self];
     [self.fullScreenModal setDelegate:self];
+    [self.fullScreenModal setAnimationSpeed:0.25];
+    [self.fullScreenModal setParentViewScaling:0.60];
     [self.fullScreenModal presentRootViewControllerWithPresentationStyle:DMCUstomModalViewControllerPresentFullScreen controllercompletion:^{
         
     }];

@@ -9,9 +9,6 @@
 #import "DMCustomModalViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
-const CGFloat kAnimationDurationZPosition = 0.3;
-const CGFloat kAnimationDurationScaling = 0.3;
-const CGFloat kAnimationDurationShowingView = 0.3;
 const CGFloat KZposition = -4000;
 const CGFloat kDeep = 0.80;
 
@@ -19,7 +16,9 @@ const CGFloat kDeep = 0.80;
 
 @property (nonatomic, weak) UIViewController *fromViewController;
 @property (nonatomic, strong, readwrite) UIView *overlayView;
+@property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic) DMCustomModalViewControllerPresentationStyle currentPresentationStyle;
+- (void)onTapGesture;
 @end
 
 @implementation DMCustomModalViewController
@@ -40,6 +39,9 @@ const CGFloat kDeep = 0.80;
     if (self) {
         _rootViewController = rootViewController;
         _fromViewController = parentViewController;
+        _animationSpeed = 0.30;
+        _tapParentViewToClose = YES;
+        _parentViewScaling = kDeep;
     }
     return self;
 }
@@ -83,17 +85,23 @@ const CGFloat kDeep = 0.80;
                                               0.0f);
         [primaryView addSubview:self.overlayView];
         [self.overlayView setAlpha:0.2];
+        if (self.isTapParentViewToClose) {
+            _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTapGesture)];
+            [self.tapGesture setNumberOfTapsRequired:1],
+            [self.overlayView addGestureRecognizer:self.tapGesture];
+            [self.overlayView setUserInteractionEnabled:YES];
+        }
     };
     void (^scaleView) (void) = ^{
         CGAffineTransform xForm = primaryView.transform;
-        primaryView.transform = CGAffineTransformScale(xForm, kDeep, kDeep);
+        primaryView.transform = CGAffineTransformScale(xForm, _parentViewScaling, _parentViewScaling);
     };
     primaryView.window.backgroundColor = [UIColor blackColor];
-    [UIView animateWithDuration:kAnimationDurationZPosition
+    [UIView animateWithDuration:_animationSpeed
                      animations:modifyAngle
                      completion:^(BOOL finished) {
                          if (finished) {
-                             [UIView animateWithDuration:kAnimationDurationScaling
+                             [UIView animateWithDuration:_animationSpeed
                                                    delay:0.0
                                                  options:UIViewAnimationOptionCurveEaseIn
                                               animations:scaleView
@@ -118,7 +126,7 @@ const CGFloat kDeep = 0.80;
                                      __block CGRect frame = self.view.frame;
                                      frame.origin.y = frame.size.height + 30;
                                      [self.view setFrame:frame];
-                                     [UIView animateWithDuration:kAnimationDurationShowingView animations:^{
+                                     [UIView animateWithDuration:_animationSpeed animations:^{
                                          frame.origin.y = frame.size.height - self.rootViewControllerHeight;
                                          [self.view setFrame:frame];
                                      }completion:^(BOOL finished) {
@@ -159,12 +167,12 @@ const CGFloat kDeep = 0.80;
     };
     
     void (^animationBlock) (void) = ^{
-        [UIView animateWithDuration:kAnimationDurationZPosition
+        [UIView animateWithDuration:_animationSpeed
                               delay:0.05
                             options:UIViewAnimationOptionCurveEaseIn
                          animations:modifyAngle
                          completion:^(BOOL finished) {
-                             [UIView animateWithDuration:kAnimationDurationScaling
+                             [UIView animateWithDuration:_animationSpeed
                                               animations:scaleView
                                               completion:^(BOOL finished) {
                                                   if (finished)
@@ -185,7 +193,7 @@ const CGFloat kDeep = 0.80;
      }];
     
     if (_currentPresentationStyle == DMCUstomModalViewControllerPresentFullScreen) {
-        primaryView.transform =  CGAffineTransformScale(primaryView.transform, kDeep, kDeep);
+        primaryView.transform =  CGAffineTransformScale(primaryView.transform, _parentViewScaling, _parentViewScaling);
     }
     
     dispatch_time_t modalDelay =
@@ -193,6 +201,14 @@ const CGFloat kDeep = 0.80;
     dispatch_after(modalDelay, dispatch_get_main_queue(), animationBlock);
     
 
+}
+
+#pragma mark - Tap gesture
+- (void)onTapGesture
+{
+    [self dismissRootViewControllerWithcompletion:^{
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning
