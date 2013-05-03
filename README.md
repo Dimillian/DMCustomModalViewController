@@ -21,9 +21,9 @@ You should not subclass it, it act as a container view controller that you can d
 
 **TL;DR:** Look at the example provided. 
 
+Add DMCustomModalViewController.h and .m from the **classes/** folder to your Xcode project.
 
-Import `DMCustomModalViewController` in your project. 
-`DMCustomModalViewController` provide 2 ways for presenting it root view controller
+Import `DMCustomModalViewController.h`where you want to use it. 
 
 ###Full Screen
 
