@@ -81,6 +81,8 @@ You can also customize the scaling of the parent controller view when the modal 
 
 Also by default when you tap on the parent view when the modal is not presented full screen it will close it, you can turn it off by setting `tapParentViewToClose` to `NO`.
 
+If you `rootViewController` view have a navigation bar you'll be able to drag the navigation bar if `dragRootViewNavigationBar` is set to YES (by default it is set to YES). Work only when the modal view is not presented full screen.
+
 There are some other properties for you to play with.
 
 The example provide sliders on the UI to better understand the effect of each property.

@@ -58,11 +58,24 @@ typedef NS_ENUM(NSInteger, DMCustomModalViewControllerPresentationStyle) {
 @property (nonatomic) CGFloat parentViewYPath;
 
 /**
- When the presentation style is in DMCustomModalViewControllerPresentPartScreen you can tap
+ When the presentation style is set to DMCustomModalViewControllerPresentPartScreen you can tap
  the visible part of the background view controller to close the modal view
  The default value is YES
  */
 @property (nonatomic, getter = isTapParentViewToClose) BOOL tapParentViewToClose;
+
+/**
+ When the presensation style is set to DMCustomModalViewControllerPresentPartScreen you can drag the 
+ navigation bar of your root view controller (if any navigation bar) to close it
+ The default value is YES
+ */
+@property (nonatomic, getter = isDragRootViewNavigationBar) BOOL dragRootViewNavigationBar;
+
+/**
+ if dragRootViewNavigationBar is set to YES you can set the alpha value of the root view when dragged
+ the default value is 0.8
+ */
+@property (nonatomic) CGFloat draggedRootViewAlphaValue;
 
 /**
  Designated initializer, return a new DMCustomModalViewController

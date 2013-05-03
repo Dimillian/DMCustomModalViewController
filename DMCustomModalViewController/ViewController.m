@@ -60,6 +60,12 @@
     [self.modal setRootViewControllerHeight:slider.value];
 }
 
+- (void)onModalAlphaBackground:(id)sender
+{
+    UISlider *slider = (UISlider *)sender;
+    [self.modal setDraggedRootViewAlphaValue:slider.value];
+}
+
 - (void)showModal
 {
     [self.modal setDelegate:self];
@@ -157,6 +163,19 @@
     [slider setMaximumValue:500.0];
     [slider setMinimumValue:0.0];
     [slider setValue:400 animated:YES];
+    [self.view addSubview:slider];
+    
+    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 470, self.view.frame.size.width - 10, 20)];
+    [label setText:@"Modal alpha when dragged"];
+    [label setTextAlignment:NSTextAlignmentCenter];
+    [label setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:label];
+    
+    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 490, self.view.frame.size.width - 10, 30)];
+    [slider addTarget:self action:@selector(onModalAlphaBackground:) forControlEvents:UIControlEventValueChanged];
+    [slider setMaximumValue:1.0];
+    [slider setMinimumValue:0.0];
+    [slider setValue:0.80 animated:YES];
     [self.view addSubview:slider];
 }
 

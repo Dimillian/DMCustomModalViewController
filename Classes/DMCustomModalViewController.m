@@ -17,6 +17,9 @@ const CGFloat kDeep = 0.80;
 @property (nonatomic, weak) UIViewController *fromViewController;
 @property (nonatomic, strong, readwrite) UIView *overlayView;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
+@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
+@property (nonatomic, strong) UINavigationBar *contentNavBar;
+@property (nonatomic) CGPoint initialPoint;
 @property (nonatomic) DMCustomModalViewControllerPresentationStyle currentPresentationStyle;
 - (void)onTapGesture;
 @end
@@ -41,9 +44,11 @@ const CGFloat kDeep = 0.80;
         _fromViewController = parentViewController;
         _animationSpeed = 0.30;
         _tapParentViewToClose = YES;
+        _dragRootViewNavigationBar = YES;
         _parentViewScaling = kDeep;
         _parentViewYPath = 0.0;
         _rootViewControllerHeight = 400.0;
+        _draggedRootViewAlphaValue = 0.80;
     }
     return self;
 }
@@ -57,8 +62,18 @@ const CGFloat kDeep = 0.80;
     [self.view addSubview:self.rootViewController.view];
     CGRect frame = self.rootViewController.view.frame;
     frame.origin.y = 0;
-    [self.rootViewController.view setFrame:frame];
     [self.rootViewController didMoveToParentViewController:self];
+    [self.rootViewController.view setFrame:frame];
+    for (UIView *view in self.rootViewController.view.subviews) {
+        if ([view isKindOfClass:[UINavigationBar class]]) {
+            _panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self
+                                                                action:@selector(onPanGesture:)];
+            _contentNavBar = (UINavigationBar *)view;
+            [self.contentNavBar addGestureRecognizer:self.panGesture];
+            [self.panGesture setEnabled:self.isDragRootViewNavigationBar];
+            [self.contentNavBar setUserInteractionEnabled:YES];
+        }
+    }
 }
 
 
@@ -211,12 +226,75 @@ const CGFloat kDeep = 0.80;
 
 }
 
-#pragma mark - Tap gesture
+#pragma mark - setter
+- (void)setTapParentViewToClose:(BOOL)tapParentViewToClose
+{
+    _tapParentViewToClose = tapParentViewToClose;
+    [self.tapGesture setEnabled:tapParentViewToClose];
+}
+
+- (void)setDragRootViewNavigationBar:(BOOL)dragRootViewNavigationBar
+{
+    _dragRootViewNavigationBar = dragRootViewNavigationBar;
+    [self.panGesture setEnabled:dragRootViewNavigationBar];
+}
+
+#pragma mark - gesture
 - (void)onTapGesture
 {
     [self dismissRootViewControllerWithcompletion:^{
         
     }];
+}
+
+- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        UIView *piece = gestureRecognizer.view;
+        CGPoint locationInView = [gestureRecognizer locationInView:piece];
+        CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
+        
+        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width,
+                                              locationInView.y / piece.bounds.size.height);
+        piece.center = locationInSuperview;
+    }
+}
+
+
+-(void)onPanGesture:(UIPanGestureRecognizer *)reconizer
+{
+    [self adjustAnchorPointForGestureRecognizer:reconizer];
+    UIView *draggableView = self.rootViewController.view;
+    if (reconizer.state == UIGestureRecognizerStateBegan) {
+        _initialPoint = draggableView.layer.position;
+        [UIView animateWithDuration:0.2 animations:^{
+            draggableView.alpha = _draggedRootViewAlphaValue;
+        }];
+        
+    }
+    else if (reconizer.state == UIGestureRecognizerStateChanged){
+        CGPoint translation = [reconizer translationInView:[draggableView superview]];
+        [draggableView setCenter:CGPointMake([draggableView center].x ,
+                                             [draggableView center].y + translation.y)];
+        [reconizer setTranslation:CGPointZero inView:[draggableView superview]];
+        
+    }
+    else if (reconizer.state == UIGestureRecognizerStateEnded ||
+             reconizer.state == UIGestureRecognizerStateCancelled){
+        CGRect frame = draggableView.frame;
+        if (frame.origin.y > _rootViewControllerHeight/2) {
+            [self dismissRootViewControllerWithcompletion:^{
+                draggableView.layer.position = _initialPoint;
+                draggableView.alpha = 1.0;
+            }];
+        }
+        else{
+            [UIView animateWithDuration:0.2 animations:^{
+                draggableView.layer.position = _initialPoint;
+                draggableView.alpha = 1.0;
+            }];
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning
