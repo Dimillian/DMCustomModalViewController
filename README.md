@@ -11,6 +11,11 @@ You should not subclass it, it act as a container view controller that you can d
 
 `DMCustomModalViewController` provide a quick and an easy solution to display modal view controller with a nice animation. It have an option to display the modal view controller not full screen and keeping the current view controller in the background with a nice overlay on it. 
 
+1. 2 ways of presenting it, fullscreen or not full screen.
+2. Nice animations!
+3. Keep the current context and display the view in background and add an onverlay on it.
+4. More to come.
+
 
 ##How to use it
 
