@@ -85,6 +85,7 @@ const CGFloat kDeep = 0.80;
 }
 
 
+
 - (void)presentRootViewControllerWithPresentationStyle:(DMCustomModalViewControllerPresentationStyle)presentationStyle
                                   controllercompletion:(void (^)(void))completion
 {
@@ -277,7 +278,6 @@ const CGFloat kDeep = 0.80;
 
 -(void)onPanGesture:(UIPanGestureRecognizer *)reconizer
 {
-    [self adjustAnchorPointForGestureRecognizer:reconizer];
     UIView *draggableView = self.rootViewController.view;
     if (reconizer.state == UIGestureRecognizerStateBegan) {
         _initialPoint = draggableView.layer.position;
@@ -287,6 +287,7 @@ const CGFloat kDeep = 0.80;
         
     }
     else if (reconizer.state == UIGestureRecognizerStateChanged){
+            [self adjustAnchorPointForGestureRecognizer:reconizer];
         CGPoint translation = [reconizer translationInView:[draggableView superview]];
         CGPoint newPoint;
         newPoint = CGPointMake([draggableView center].x ,
