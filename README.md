@@ -49,20 +49,15 @@ You should not subclass it, it act as a container view controller that you can d
 If you are not presenting it fullscreen you need to set the `rootViewControllerHeight` property. This value will be used to know how much of your `rootViewController` need to be displayed
 
 ###Dismiss
+`DMCustomModalViewController` provide a built in category, just import the **.h** of `DMCustomModalViewController` in your `rootViewController` you passed to the instance of `DMCustomModalViewController`, you will have access to a new property `customModalViewController`. You can then freely dismiss the modal from itself. 
 
-Within your `UIViewController` subclass that is used as the root view controller of the modal view, you can access the `parentViewController` which should be an instance of `DMCustomModalViewController`.
-You could simply do something like this
+ 	[self.customModalViewController dismissRootViewControllerWithcompletion:^{
 
-	- (void)dismissModal
-	{
-    	DMCustomModalViewController *modal = (DMCustomModalViewController *)self.parentViewController;
-    	[modal dismissRootViewControllerWithcompletion:^{
-        
-    	}];
-	}
+    }];
+   
+   
+A better implementation would be to build yourself some `delegate` for your `rootViewController`, so the controller which fired the modal would be also responsible for dismissing it.
 	
-I know you should not dismiss your modal view from within itself, but I'll provide a better implementation with a future version. 
-
 
 ###Delegate
 

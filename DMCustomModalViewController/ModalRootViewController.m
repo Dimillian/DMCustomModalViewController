@@ -44,9 +44,10 @@
 
 - (void)dismissModal
 {
-    DMCustomModalViewController *modal = (DMCustomModalViewController *)self.parentViewController;
-    [modal dismissRootViewControllerWithcompletion:^{
-        
+    //if you import DMCustomModalViewController.h in you modal root controller it add some magic to it
+    //you can freely access your DMCustomModalViewController
+    [self.customModalViewController dismissRootViewControllerWithcompletion:^{
+
     }];
 }
 

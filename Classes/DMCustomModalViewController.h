@@ -100,3 +100,13 @@ typedef NS_ENUM(NSInteger, DMCustomModalViewControllerPresentationStyle) {
  */
 - (void)dismissRootViewControllerWithcompletion:(void (^)(void))completion;
 @end
+
+//Add access to DMCustomModalViewController from within your UIViewController
+@interface UIViewController (UIViewControllerCustomModalItem)
+/**
+ Not nil if you're accessing this property from within a UIViewController which have for parent an instance
+of DMCustomModalViewController
+ */
+@property (nonatomic, strong, readonly) DMCustomModalViewController *customModalViewController;
+
+@end

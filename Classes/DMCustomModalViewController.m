@@ -304,3 +304,16 @@ const CGFloat kDeep = 0.80;
 }
 
 @end
+
+@implementation UIViewController (UIViewControllerCustomModalItem)
+@dynamic customModalViewController;
+
+- (DMCustomModalViewController *)customModalViewController
+{
+    if ([self.parentViewController isKindOfClass:[DMCustomModalViewController class]]) {
+        return (DMCustomModalViewController *)self.parentViewController;
+    }
+    return nil;
+}
+
+@end
