@@ -18,6 +18,7 @@ const CGFloat kDeep = 0.80;
 @property (nonatomic, strong, readwrite) UIView *overlayView;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
+@property (nonatomic, strong) UIPanGestureRecognizer *panFullView;
 @property (nonatomic, strong) UINavigationBar *contentNavBar;
 @property (nonatomic) CGPoint initialPoint;
 @property (nonatomic) DMCustomModalViewControllerPresentationStyle currentPresentationStyle;
@@ -40,11 +41,17 @@ const CGFloat kDeep = 0.80;
 {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
+        _panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self
+                                                             action:@selector(onPanGesture:)];
+        _panFullView = [[UIPanGestureRecognizer alloc]initWithTarget:self
+                                                             action:@selector(onPanGesture:)];
         _rootViewController = rootViewController;
         _fromViewController = parentViewController;
         _animationSpeed = 0.30;
         _tapParentViewToClose = YES;
-        _dragRootViewNavigationBar = YES;
+        self.allowDragRootView = NO;
+        self.allowDragRootViewNavigationBar = YES;
+        _allowDragFromBottomToTop = NO;
         _parentViewScaling = kDeep;
         _parentViewYPath = 0.0;
         _rootViewControllerHeight = 400.0;
@@ -64,16 +71,17 @@ const CGFloat kDeep = 0.80;
     frame.origin.y = 0;
     [self.rootViewController didMoveToParentViewController:self];
     [self.rootViewController.view setFrame:frame];
+    [self.rootViewController.view addGestureRecognizer:self.panFullView];
+    [self.rootViewController.view setUserInteractionEnabled:YES];
     for (UIView *view in self.rootViewController.view.subviews) {
         if ([view isKindOfClass:[UINavigationBar class]]) {
-            _panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self
-                                                                action:@selector(onPanGesture:)];
             _contentNavBar = (UINavigationBar *)view;
             [self.contentNavBar addGestureRecognizer:self.panGesture];
-            [self.panGesture setEnabled:self.isDragRootViewNavigationBar];
+            [self.panGesture setEnabled:self.isAllowDragRootViewNavigationBar];
             [self.contentNavBar setUserInteractionEnabled:YES];
         }
     }
+
 }
 
 
@@ -233,10 +241,16 @@ const CGFloat kDeep = 0.80;
     [self.tapGesture setEnabled:tapParentViewToClose];
 }
 
-- (void)setDragRootViewNavigationBar:(BOOL)dragRootViewNavigationBar
+- (void)setAllowDragRootViewNavigationBar:(BOOL)allowDragRootViewNavigationBar
 {
-    _dragRootViewNavigationBar = dragRootViewNavigationBar;
-    [self.panGesture setEnabled:dragRootViewNavigationBar];
+    _allowDragRootViewNavigationBar = allowDragRootViewNavigationBar;
+    [self.panGesture setEnabled:allowDragRootViewNavigationBar];
+}
+
+- (void)setAllowDragRootView:(BOOL)allowDragRootView
+{
+    _allowDragRootView = allowDragRootView;
+    [self.panFullView setEnabled:allowDragRootView];
 }
 
 #pragma mark - gesture
@@ -274,8 +288,14 @@ const CGFloat kDeep = 0.80;
     }
     else if (reconizer.state == UIGestureRecognizerStateChanged){
         CGPoint translation = [reconizer translationInView:[draggableView superview]];
-        [draggableView setCenter:CGPointMake([draggableView center].x ,
-                                             [draggableView center].y + translation.y)];
+        CGPoint newPoint;
+        newPoint = CGPointMake([draggableView center].x ,
+                               [draggableView center].y + translation.y);
+        if (newPoint.y < _initialPoint.y && !self.isAllowDragFromBottomToTop) {
+            newPoint = CGPointMake([draggableView center].x ,
+                                   [draggableView center].y);
+        }
+        [draggableView setCenter:newPoint];
         [reconizer setTranslation:CGPointZero inView:[draggableView superview]];
         
     }

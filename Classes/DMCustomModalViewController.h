@@ -69,7 +69,23 @@ typedef NS_ENUM(NSInteger, DMCustomModalViewControllerPresentationStyle) {
  navigation bar of your root view controller (if any navigation bar) to close it
  The default value is YES
  */
-@property (nonatomic, getter = isDragRootViewNavigationBar) BOOL dragRootViewNavigationBar;
+@property (nonatomic, getter = isAllowDragRootViewNavigationBar) BOOL allowDragRootViewNavigationBar;
+
+/**
+ When the presensation style is set to DMCustomModalViewControllerPresentPartScreen you can drag the
+ full view of your root view controller
+ The default value is NO
+ If set to YES then the gesture will be place on the whole view and not only on the navigation bar
+ */
+@property (nonatomic, getter = isAllowDragRootView) BOOL allowDragRootView;
+
+/**
+ When the presensation style is set to DMCustomModalViewControllerPresentPartScreen and that you allow
+ draggin on the modal, you can define if you want to allow the user to show more of the modal, to drag
+ it from bottom to top. 
+ by defaul it is set to NO so you can only drag from top to bottom
+ */
+@property (nonatomic, getter = isAllowDragFromBottomToTop) BOOL allowDragFromBottomToTop;
 
 /**
  if dragRootViewNavigationBar is set to YES you can set the alpha value of the root view when dragged
