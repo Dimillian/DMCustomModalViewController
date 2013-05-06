@@ -147,7 +147,6 @@ const CGFloat kDeep = 0.80;
                              else if (presentationStyle == DMCustomModalViewControllerPresentPartScreen){
                                  
                                  modalBlock = ^{
-                                     self.fromViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
                                      [self.fromViewController
                                       presentViewController:self animated:NO completion:^{
                        
