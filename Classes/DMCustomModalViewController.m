@@ -147,6 +147,7 @@ const CGFloat kDeep = 0.80;
                              else if (presentationStyle == DMCustomModalViewControllerPresentPartScreen){
                                  
                                  modalBlock = ^{
+                                     self.fromViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
                                      [self.fromViewController
                                       presentViewController:self animated:NO completion:^{
                        
@@ -261,19 +262,6 @@ const CGFloat kDeep = 0.80;
     }];
 }
 
-- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
-{
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        UIView *piece = gestureRecognizer.view;
-        CGPoint locationInView = [gestureRecognizer locationInView:piece];
-        CGPoint locationInSuperview = [gestureRecognizer locationInView:piece.superview];
-        
-        piece.layer.anchorPoint = CGPointMake(locationInView.x / piece.bounds.size.width,
-                                              locationInView.y / piece.bounds.size.height);
-        piece.center = locationInSuperview;
-    }
-}
-
 
 -(void)onPanGesture:(UIPanGestureRecognizer *)reconizer
 {
@@ -286,7 +274,6 @@ const CGFloat kDeep = 0.80;
         
     }
     else if (reconizer.state == UIGestureRecognizerStateChanged){
-            [self adjustAnchorPointForGestureRecognizer:reconizer];
         CGPoint translation = [reconizer translationInView:[draggableView superview]];
         CGPoint newPoint;
         newPoint = CGPointMake([draggableView center].x ,
