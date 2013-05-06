@@ -22,7 +22,8 @@
     [self setupTestUI];
     
     ModalRootViewController *root = [[ModalRootViewController alloc]initWithNibName:nil bundle:nil];
-    _modal = [[DMCustomModalViewController alloc]initWithRootViewController:root
+    UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:root];
+    _modal = [[DMCustomModalViewController alloc]initWithRootViewController:navController
                                                        parentViewController:self];
 
     

@@ -313,6 +313,11 @@ const CGFloat kDeep = 0.80;
     if ([self.parentViewController isKindOfClass:[DMCustomModalViewController class]]) {
         return (DMCustomModalViewController *)self.parentViewController;
     }
+    if (self.navigationController) {
+        if ([self.navigationController.parentViewController isKindOfClass:[DMCustomModalViewController class]]) {
+            return (DMCustomModalViewController *)self.navigationController.parentViewController;
+        }
+    }
     return nil;
 }
 
