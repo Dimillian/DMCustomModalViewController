@@ -9,8 +9,8 @@
 #import "DMCustomModalViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
-const CGFloat KZposition = -4000;
-const CGFloat kDeep = 0.80;
+static const CGFloat KZposition = -4000;
+static const CGFloat kDeep = 0.80;
 
 @interface DMCustomModalViewController ()
 
