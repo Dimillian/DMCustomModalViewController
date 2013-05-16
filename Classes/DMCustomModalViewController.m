@@ -109,7 +109,7 @@ static const CGFloat kDeep = 0.80;
                                               1.0f,
                                               0.0f,
                                               0.0f);
-        [primaryView addSubview:self.overlayView];
+        [primaryView.window addSubview:self.overlayView];
         [self.overlayView setAlpha:0.2];
         if (self.isTapParentViewToClose) {
             _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTapGesture)];
