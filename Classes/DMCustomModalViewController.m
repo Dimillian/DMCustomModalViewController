@@ -176,7 +176,6 @@ static const CGFloat kDeep = 0.80;
 - (void)dismissRootViewControllerWithcompletion:(void (^)(void))completion
 {
     UIView *primaryView = self.fromViewController.view;
-
     void (^modifyAngle) (void) = ^{
         CALayer *layer = primaryView.layer;
         layer.zPosition = KZposition;
@@ -214,6 +213,9 @@ static const CGFloat kDeep = 0.80;
                                                       [self.delegate customModalViewControllerDidDismiss:self];
                                                   }
                                                   completion();
+                                                  if (_closeCompletionBlock) {
+                                                      _closeCompletionBlock();
+                                                  }
                                               }];
                          }];
         

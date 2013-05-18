@@ -13,6 +13,8 @@ typedef NS_ENUM(NSInteger, DMCustomModalViewControllerPresentationStyle) {
     DMCustomModalViewControllerPresentPartScreen
 };
 
+typedef void (^DMmodalDidCloseCompletion)();
+
 @class DMCustomModalViewController;
 
 @protocol DMCustomViewControllerDelegate <NSObject>
@@ -92,6 +94,11 @@ typedef NS_ENUM(NSInteger, DMCustomModalViewControllerPresentationStyle) {
  the default value is 0.8
  */
 @property (nonatomic) CGFloat draggedRootViewAlphaValue;
+
+/**
+ You can assign a block to this, it will get called even if the user close the modal by draggin the navigation bar
+ */
+@property (nonatomic, copy) DMmodalDidCloseCompletion closeCompletionBlock;
 
 /**
  Designated initializer, return a new DMCustomModalViewController
