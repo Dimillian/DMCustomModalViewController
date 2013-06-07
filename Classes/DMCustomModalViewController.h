@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, DMCustomModalViewControllerPresentationStyle) {
-    DMCUstomModalViewControllerPresentFullScreen,
+    DMCustomModalViewControllerPresentFullScreen,
     DMCustomModalViewControllerPresentPartScreen
 };
 
-typedef void (^DMmodalDidCloseCompletion)();
+typedef void (^DMModalDidCloseCompletion)();
 
 @class DMCustomModalViewController;
 
@@ -46,7 +46,7 @@ typedef void (^DMmodalDidCloseCompletion)();
  */
 @property (nonatomic) CGFloat animationSpeed;
 /**
- This value is used when aplying CGAffineTransformScale to the parentViewController view 
+ This value is used when applying CGAffineTransformScale to the parentViewController view
  for the modal presenting animation. Affect the recoil effect.
  The default value is 0.80
  */
@@ -67,14 +67,14 @@ typedef void (^DMmodalDidCloseCompletion)();
 @property (nonatomic, getter = isTapParentViewToClose) BOOL tapParentViewToClose;
 
 /**
- When the presensation style is set to DMCustomModalViewControllerPresentPartScreen you can drag the 
+ When the presentation style is set to DMCustomModalViewControllerPresentPartScreen you can drag the
  navigation bar of your root view controller (if any navigation bar) to close it
  The default value is YES
  */
 @property (nonatomic, getter = isAllowDragRootViewNavigationBar) BOOL allowDragRootViewNavigationBar;
 
 /**
- When the presensation style is set to DMCustomModalViewControllerPresentPartScreen you can drag the
+ When the presentation style is set to DMCustomModalViewControllerPresentPartScreen you can drag the
  full view of your root view controller
  The default value is NO
  If set to YES then the gesture will be place on the whole view and not only on the navigation bar
@@ -82,10 +82,10 @@ typedef void (^DMmodalDidCloseCompletion)();
 @property (nonatomic, getter = isAllowDragRootView) BOOL allowDragRootView;
 
 /**
- When the presensation style is set to DMCustomModalViewControllerPresentPartScreen and that you allow
- draggin on the modal, you can define if you want to allow the user to show more of the modal, to drag
+ When the presentation style is set to DMCustomModalViewControllerPresentPartScreen and that you allow
+ dragging on the modal, you can define if you want to allow the user to show more of the modal, to drag
  it from bottom to top. 
- by defaul it is set to NO so you can only drag from top to bottom
+ by default it is set to NO so you can only drag from top to bottom
  */
 @property (nonatomic, getter = isAllowDragFromBottomToTop) BOOL allowDragFromBottomToTop;
 
@@ -96,9 +96,9 @@ typedef void (^DMmodalDidCloseCompletion)();
 @property (nonatomic) CGFloat draggedRootViewAlphaValue;
 
 /**
- You can assign a block to this, it will get called even if the user close the modal by draggin the navigation bar
+ You can assign a block to this, it will get called even if the user close the modal by dragging the navigation bar
  */
-@property (nonatomic, copy) DMmodalDidCloseCompletion closeCompletionBlock;
+@property (nonatomic, copy) DMModalDidCloseCompletion closeCompletionBlock;
 
 /**
  Designated initializer, return a new DMCustomModalViewController
@@ -121,7 +121,7 @@ typedef void (^DMmodalDidCloseCompletion)();
  Dismiss the modal view controller
  Provide a completion block which is called when the close animation is done
  */
-- (void)dismissRootViewControllerWithcompletion:(void (^)(void))completion;
+- (void)dismissRootViewControllerWithCompletion:(void (^)(void))completion;
 @end
 
 //Add access to DMCustomModalViewController from within your UIViewController

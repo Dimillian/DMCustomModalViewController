@@ -91,15 +91,19 @@ static const CGFloat kDeep = 0.80;
 {
     _currentPresentationStyle = presentationStyle;
     UIView *primaryView = self.fromViewController.view;
-    
+
     void (^modifyAngle) (void) = ^{
-        CGRect oFrame = CGRectMake(0, 0, primaryView.frame.size.width,
-                                   primaryView.frame.size.height);
-        _overlayView = [[UIView alloc]initWithFrame:oFrame];
+        _overlayView = [[UIView alloc]initWithFrame:primaryView.bounds];
         [self.overlayView setBackgroundColor:[UIColor blackColor]];
         [self.overlayView setAlpha:0.0];
-        [self.overlayView setAutoresizingMask:UIViewAutoresizingFlexibleHeight|
-         UIViewAutoresizingFlexibleWidth];
+
+        if (presentationStyle == DMCustomModalViewControllerPresentFullScreen){
+            [primaryView addSubview:self.overlayView];
+        }
+        else{
+            [primaryView.window addSubview:self.overlayView];
+        }
+
         CALayer *layer = primaryView.layer;
         layer.zPosition = KZposition;
         CATransform3D rotationAndPerspectiveTransform = layer.transform;
@@ -109,7 +113,8 @@ static const CGFloat kDeep = 0.80;
                                               1.0f,
                                               0.0f,
                                               0.0f);
-        [primaryView.window addSubview:self.overlayView];
+
+
         [self.overlayView setAlpha:0.2];
         if (self.isTapParentViewToClose) {
             _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTapGesture)];
@@ -118,6 +123,7 @@ static const CGFloat kDeep = 0.80;
             [self.overlayView setUserInteractionEnabled:YES];
         }
     };
+
     void (^scaleView) (void) = ^{
         CGAffineTransform xForm = primaryView.transform;
         primaryView.transform = CGAffineTransformScale(xForm, _parentViewScaling, _parentViewScaling);
@@ -125,6 +131,7 @@ static const CGFloat kDeep = 0.80;
         frame.origin.y -= self.parentViewYPath;
         [primaryView setFrame:frame];
     };
+
     primaryView.window.backgroundColor = [UIColor blackColor];
     [UIView animateWithDuration:_animationSpeed
                      animations:modifyAngle
@@ -136,7 +143,7 @@ static const CGFloat kDeep = 0.80;
                                               animations:scaleView
                                               completion:NULL];
                              void (^modalBlock) (void);
-                             if (presentationStyle == DMCUstomModalViewControllerPresentFullScreen) {
+                             if (presentationStyle == DMCustomModalViewControllerPresentFullScreen) {
                                 modalBlock = ^{
                                      [self.fromViewController
                                       presentViewController:self animated:YES completion:^{
@@ -173,7 +180,7 @@ static const CGFloat kDeep = 0.80;
 
 }
 
-- (void)dismissRootViewControllerWithcompletion:(void (^)(void))completion
+- (void)dismissRootViewControllerWithCompletion:(void (^)(void))completion
 {
     UIView *primaryView = self.fromViewController.view;
     void (^modifyAngle) (void) = ^{
@@ -226,7 +233,7 @@ static const CGFloat kDeep = 0.80;
          
      }];
     
-    if (_currentPresentationStyle == DMCUstomModalViewControllerPresentFullScreen) {
+    if (_currentPresentationStyle == DMCustomModalViewControllerPresentFullScreen) {
         primaryView.transform =  CGAffineTransformScale(primaryView.transform, _parentViewScaling, _parentViewScaling);
     }
     
@@ -259,8 +266,8 @@ static const CGFloat kDeep = 0.80;
 #pragma mark - gesture
 - (void)onTapGesture
 {
-    [self dismissRootViewControllerWithcompletion:^{
-        
+    [self dismissRootViewControllerWithCompletion:^{
+
     }];
 }
 
@@ -292,7 +299,7 @@ static const CGFloat kDeep = 0.80;
              reconizer.state == UIGestureRecognizerStateCancelled){
         CGRect frame = draggableView.frame;
         if (frame.origin.y > _rootViewControllerHeight/2) {
-            [self dismissRootViewControllerWithcompletion:^{
+            [self dismissRootViewControllerWithCompletion:^{
                 draggableView.layer.position = _initialPoint;
                 draggableView.alpha = 1.0;
             }];

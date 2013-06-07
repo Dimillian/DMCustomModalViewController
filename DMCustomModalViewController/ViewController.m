@@ -24,7 +24,7 @@
     ModalRootViewController *root = [[ModalRootViewController alloc]initWithNibName:nil bundle:nil];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:root];
     _modal = [[DMCustomModalViewController alloc]initWithRootViewController:navController
-                                                       parentViewController:self];
+                                                       parentViewController:self.navigationController];
 
     
 	// Do any additional setup after loading the view, typically from a nib.
@@ -80,7 +80,7 @@
 {
     [self.modal setDelegate:self];
     [self.modal setAnimationSpeed:0.25];
-    [self.modal presentRootViewControllerWithPresentationStyle:DMCUstomModalViewControllerPresentFullScreen
+    [self.modal presentRootViewControllerWithPresentationStyle:DMCustomModalViewControllerPresentFullScreen
                                           controllercompletion:^{
         
     }];
@@ -102,36 +102,36 @@
 - (void)setupTestUI
 {
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [button setFrame:CGRectMake(10, 100, 150, 100)];
+    [button setFrame:CGRectMake(10, 30, 150, 100)];
     [button setTitle:@"Present modal part" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(showModal) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
     
     UIButton *button2 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [button2 setFrame:CGRectMake(165, 100, 150, 100)];
+    [button2 setFrame:CGRectMake(165, 30, 150, 100)];
     [button2 setTitle:@"Present modal full" forState:UIControlStateNormal];
     [button2 addTarget:self action:@selector(showModalFull) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button2];
     
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 235, self.view.frame.size.width - 10, 20)];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 150, self.view.frame.size.width - 10, 20)];
     [label setText:@"parent view scaling"];
     [label setTextAlignment:NSTextAlignmentCenter];
     [label setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:label];
-    UISlider *slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 250, self.view.frame.size.width - 10, 30)];
+    UISlider *slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 170, self.view.frame.size.width - 10, 30)];
     [slider addTarget:self action:@selector(onScalingSlider:) forControlEvents:UIControlEventValueChanged];
     [slider setMaximumValue:1.0];
     [slider setMinimumValue:0.0];
     [slider setValue:0.80 animated:YES];
     [self.view addSubview:slider];
     
-    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 295, self.view.frame.size.width - 10, 20)];
+    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 210, self.view.frame.size.width - 10, 20)];
     [label setText:@"Animation Speed"];
     [label setTextAlignment:NSTextAlignmentCenter];
     [label setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:label];
     
-    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 310, self.view.frame.size.width - 10, 30)];
+    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 230, self.view.frame.size.width - 10, 30)];
     [slider addTarget:self action:@selector(onAnimationSpeedSlider:) forControlEvents:UIControlEventValueChanged];
     [slider setMaximumValue:1.0];
     [slider setMinimumValue:0.0];
@@ -139,13 +139,13 @@
     [self.view addSubview:slider];
     
     
-    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 350, self.view.frame.size.width - 10, 20)];
+    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 270, self.view.frame.size.width - 10, 20)];
     [label setText:@"Parent view Y path"];
     [label setTextAlignment:NSTextAlignmentCenter];
     [label setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:label];
     
-    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 375, self.view.frame.size.width - 10, 30)];
+    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 290, self.view.frame.size.width - 10, 30)];
     [slider addTarget:self action:@selector(onParentViewYPathSlider:) forControlEvents:UIControlEventValueChanged];
     [slider setMaximumValue:100.0];
     [slider setMinimumValue:0.0];
@@ -153,26 +153,26 @@
     [self.view addSubview:slider];
     
     
-    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 420, self.view.frame.size.width - 10, 20)];
+    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 330, self.view.frame.size.width - 10, 20)];
     [label setText:@"Modal height"];
     [label setTextAlignment:NSTextAlignmentCenter];
     [label setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:label];
     
-    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 435, self.view.frame.size.width - 10, 30)];
+    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 350, self.view.frame.size.width - 10, 30)];
     [slider addTarget:self action:@selector(onModalHeightSlider:) forControlEvents:UIControlEventValueChanged];
     [slider setMaximumValue:500.0];
     [slider setMinimumValue:0.0];
     [slider setValue:400 animated:YES];
     [self.view addSubview:slider];
     
-    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 470, self.view.frame.size.width - 10, 20)];
+    label = [[UILabel alloc]initWithFrame:CGRectMake(10, 390, self.view.frame.size.width - 10, 20)];
     [label setText:@"Modal alpha when dragged"];
     [label setTextAlignment:NSTextAlignmentCenter];
     [label setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:label];
     
-    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 490, self.view.frame.size.width - 10, 30)];
+    slider = [[UISlider alloc]initWithFrame:CGRectMake(10, 410, self.view.frame.size.width - 10, 30)];
     [slider addTarget:self action:@selector(onModalAlphaBackground:) forControlEvents:UIControlEventValueChanged];
     [slider setMaximumValue:1.0];
     [slider setMinimumValue:0.0];

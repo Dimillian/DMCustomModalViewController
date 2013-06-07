@@ -41,7 +41,7 @@
 {
     //if you import DMCustomModalViewController.h in you modal root controller it add some magic to it
     //you can freely access your DMCustomModalViewController
-    [self.customModalViewController dismissRootViewControllerWithcompletion:^{
+    [self.customModalViewController dismissRootViewControllerWithCompletion:^{
 
     }];
 }
