@@ -26,7 +26,7 @@ typedef void (^DMModalDidCloseCompletion)();
 - (void)customModalViewControllerDidDismiss:(DMCustomModalViewController *)modalViewController;
 @end
 
-@interface DMCustomModalViewController : UIViewController
+@interface DMCustomModalViewController : UIViewController <UIViewControllerTransitioningDelegate, UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic, unsafe_unretained) id<DMCustomViewControllerDelegate> delegate;
 /**

@@ -89,95 +89,13 @@ static const CGFloat kDeep = 0.80;
 - (void)presentRootViewControllerWithPresentationStyle:(DMCustomModalViewControllerPresentationStyle)presentationStyle
                                   controllercompletion:(void (^)(void))completion
 {
-    _currentPresentationStyle = presentationStyle;
-    UIView *primaryView = self.fromViewController.view;
-
-    void (^modifyAngle) (void) = ^{
-        _overlayView = [[UIView alloc]initWithFrame:primaryView.bounds];
-        [self.overlayView setBackgroundColor:[UIColor blackColor]];
-        [self.overlayView setAlpha:0.0];
-
-        if (presentationStyle == DMCustomModalViewControllerPresentFullScreen){
-            [primaryView addSubview:self.overlayView];
-        }
-        else{
-            [primaryView.window addSubview:self.overlayView];
-        }
-
-        CALayer *layer = primaryView.layer;
-        layer.zPosition = KZposition;
-        CATransform3D rotationAndPerspectiveTransform = layer.transform;
-        rotationAndPerspectiveTransform.m34 = 1.0 / -300;
-        layer.transform = CATransform3DRotate(rotationAndPerspectiveTransform,
-                                              2.0f * M_PI / 180.0f,
-                                              1.0f,
-                                              0.0f,
-                                              0.0f);
-
-
-        [self.overlayView setAlpha:0.2];
-        if (self.isTapParentViewToClose) {
-            _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTapGesture)];
-            [self.tapGesture setNumberOfTapsRequired:1],
-            [self.overlayView addGestureRecognizer:self.tapGesture];
-            [self.overlayView setUserInteractionEnabled:YES];
-        }
-    };
-
-    void (^scaleView) (void) = ^{
-        CGAffineTransform xForm = primaryView.transform;
-        primaryView.transform = CGAffineTransformScale(xForm, _parentViewScaling, _parentViewScaling);
-        CGRect frame = primaryView.frame;
-        frame.origin.y -= self.parentViewYPath;
-        [primaryView setFrame:frame];
-    };
-
-    primaryView.window.backgroundColor = [UIColor blackColor];
-    [UIView animateWithDuration:_animationSpeed
-                     animations:modifyAngle
-                     completion:^(BOOL finished) {
-                         if (finished) {
-                             [UIView animateWithDuration:_animationSpeed
-                                                   delay:0.0
-                                                 options:UIViewAnimationOptionCurveEaseIn
-                                              animations:scaleView
-                                              completion:NULL];
-                             void (^modalBlock) (void);
-                             if (presentationStyle == DMCustomModalViewControllerPresentFullScreen) {
-                                modalBlock = ^{
-                                     [self.fromViewController
-                                      presentViewController:self animated:YES completion:^{
-                                          completion();
-                                      }];
-                                 };
-                             }
-                             else if (presentationStyle == DMCustomModalViewControllerPresentPartScreen){
-                                 
-                                 modalBlock = ^{
-                                     self.fromViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
-                                     [self.fromViewController
-                                      presentViewController:self animated:NO completion:^{
-                       
-                                      }];
-                                     __block CGRect frame = self.view.frame;
-                                     frame.origin.y = frame.size.height + 30;
-                                     [self.view setFrame:frame];
-                                     [UIView animateWithDuration:_animationSpeed animations:^{
-                                         frame.origin.y = frame.size.height - self.rootViewControllerHeight;
-                                         [self.view setFrame:frame];
-                                     }completion:^(BOOL finished) {
-                                        completion();
-                                     }];
-                                 };
-                             }
-                             
-                             dispatch_time_t modalDelay =
-                             dispatch_time(DISPATCH_TIME_NOW, 10000000);
-                             dispatch_after(modalDelay, dispatch_get_main_queue(), modalBlock);
-                             
-                         }
-                     }];
-
+    [self setCurrentPresentationStyle:presentationStyle];
+    [self setModalPresentationStyle:UIModalPresentationCustom];
+    [self setTransitioningDelegate:self];
+    
+    [self.fromViewController presentViewController:self animated:YES completion:^{
+        
+    }];
 }
 
 - (void)dismissRootViewControllerWithCompletion:(void (^)(void))completion
@@ -317,6 +235,108 @@ static const CGFloat kDeep = 0.80;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
+{
+    return self;
+}
+
+- (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
+    
+    return self.animationSpeed;
+    
+}
+
+
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+   
+    UIViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+        
+    NSTimeInterval duration = [self transitionDuration:transitionContext];
+    
+    UIView *primaryView = fromViewController.view;
+    
+    void (^modifyAngle) (void) = ^{
+        _overlayView = [[UIView alloc]initWithFrame:primaryView.bounds];
+        [self.overlayView setBackgroundColor:[UIColor blackColor]];
+        [self.overlayView setAlpha:0.0];
+        
+        if (self.currentPresentationStyle == DMCustomModalViewControllerPresentFullScreen){
+            [primaryView addSubview:self.overlayView];
+        }
+        else{
+            [primaryView.window addSubview:self.overlayView];
+        }
+        
+        CALayer *layer = primaryView.layer;
+        layer.zPosition = KZposition;
+        CATransform3D rotationAndPerspectiveTransform = layer.transform;
+        rotationAndPerspectiveTransform.m34 = 1.0 / -300;
+        layer.transform = CATransform3DRotate(rotationAndPerspectiveTransform,
+                                              2.0f * M_PI / 180.0f,
+                                              1.0f,
+                                              0.0f,
+                                              0.0f);
+        
+        
+        [self.overlayView setAlpha:0.2];
+        if (self.isTapParentViewToClose) {
+            _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTapGesture)];
+            [self.tapGesture setNumberOfTapsRequired:1],
+            [self.overlayView addGestureRecognizer:self.tapGesture];
+            [self.overlayView setUserInteractionEnabled:YES];
+        }
+    };
+    
+    void (^scaleView) (void) = ^{
+        CGAffineTransform xForm = primaryView.transform;
+        primaryView.transform = CGAffineTransformScale(xForm, _parentViewScaling, _parentViewScaling);
+        CGRect frame = primaryView.frame;
+        frame.origin.y -= self.parentViewYPath;
+        [primaryView setFrame:frame];
+    };
+    
+    primaryView.window.backgroundColor = [UIColor blackColor];
+    [UIView animateWithDuration:duration
+                     animations:modifyAngle
+                     completion:^(BOOL finished) {
+                         if (finished) {
+                             [UIView animateWithDuration:duration
+                                                   delay:0.0
+                                                 options:UIViewAnimationOptionCurveEaseIn
+                                              animations:scaleView
+                                              completion:NULL];
+                             void (^modalBlock) (void);
+                             if (self.currentPresentationStyle == DMCustomModalViewControllerPresentFullScreen) {
+                                 modalBlock = ^{
+                                     [self.fromViewController
+                                      presentViewController:self animated:YES completion:^{
+                                          [transitionContext completeTransition:YES];
+                                      }];
+                                 };
+                             }
+                             else if (self.currentPresentationStyle == DMCustomModalViewControllerPresentPartScreen){
+                                 
+                                 modalBlock = ^{
+                                     __block CGRect frame = self.view.frame;
+                                     frame.origin.y = frame.size.height + 30;
+                                     [self.view setFrame:frame];
+                                     [UIView animateWithDuration:duration animations:^{
+                                         frame.origin.y = frame.size.height - self.rootViewControllerHeight;
+                                         [self.view setFrame:frame];
+                                     }completion:^(BOOL finished) {
+                                         [transitionContext completeTransition:YES];
+                                     }];
+                                 };
+                             }
+                             
+                             dispatch_time_t modalDelay =
+                             dispatch_time(DISPATCH_TIME_NOW, 10000000);
+                             dispatch_after(modalDelay, dispatch_get_main_queue(), modalBlock);
+                             
+                         }
+                     }];
 }
 
 @end
