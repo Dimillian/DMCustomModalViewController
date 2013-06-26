@@ -146,7 +146,7 @@ static const CGFloat kDeep = 0.80;
         
     };
     
-    [self.fromViewController
+    [self
      dismissViewControllerAnimated:YES completion:^{
          
      }];
@@ -252,22 +252,26 @@ static const CGFloat kDeep = 0.80;
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
    
     UIViewController *fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    NSLog(@"%@", fromViewController);
         
     NSTimeInterval duration = [self transitionDuration:transitionContext];
     
     UIView *primaryView = fromViewController.view;
+    
+    CGRect frame = self.view.frame;
+    frame.origin.y = frame.size.height + 30;
+    [self.view setFrame:frame];
+    
+
     
     void (^modifyAngle) (void) = ^{
         _overlayView = [[UIView alloc]initWithFrame:primaryView.bounds];
         [self.overlayView setBackgroundColor:[UIColor blackColor]];
         [self.overlayView setAlpha:0.0];
         
-        if (self.currentPresentationStyle == DMCustomModalViewControllerPresentFullScreen){
-            [primaryView addSubview:self.overlayView];
-        }
-        else{
-            [primaryView.window addSubview:self.overlayView];
-        }
+        [[transitionContext containerView]addSubview:fromViewController.view];
+        [[transitionContext containerView]addSubview:self.overlayView];
+        [[transitionContext containerView]addSubview:self.view];
         
         CALayer *layer = primaryView.layer;
         layer.zPosition = KZposition;

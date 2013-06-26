@@ -18,8 +18,7 @@
     // Override point for customization after application launch.
     UIViewController *rootVC = [[ViewController alloc] initWithNibName:@"ViewController" bundle:nil];
     UINavigationController *navController = [[UINavigationController  alloc] initWithRootViewController:rootVC];
-    self.viewController = navController;
-    self.window.rootViewController = self.viewController;
+    self.window.rootViewController = navController;
     [self.window makeKeyAndVisible];
     return YES;
 }
