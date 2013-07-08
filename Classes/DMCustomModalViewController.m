@@ -133,7 +133,6 @@ static const CGFloat kDeep = 0.80;
                                               completion:^(BOOL finished) {
                                                   if (finished)
                                                       [self.overlayView removeFromSuperview];
-                                                  self.fromViewController.modalPresentationStyle = UIModalPresentationFullScreen;
                                                   if ([self.delegate respondsToSelector:@selector(customModalViewControllerDidDismiss:)]) {
                                                       [self.delegate customModalViewControllerDidDismiss:self];
                                                   }
@@ -146,6 +145,7 @@ static const CGFloat kDeep = 0.80;
         
     };
     
+    [self setProvidesPresentationContextTransitionStyle:YES];
     [self
      dismissViewControllerAnimated:YES completion:^{
          
