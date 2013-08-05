@@ -20,6 +20,7 @@ static const CGFloat kDeep = 0.80;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panFullView;
 @property (nonatomic, strong) UINavigationBar *contentNavBar;
+@property (nonatomic, getter = isPresenting) BOOL presenting;
 @property (nonatomic) CGPoint initialPoint;
 @property (nonatomic) DMCustomModalViewControllerPresentationStyle currentPresentationStyle;
 - (void)onTapGesture;
@@ -185,11 +186,13 @@ static const CGFloat kDeep = 0.80;
                                                                   presentingController:(UIViewController *)presenting
                                                                       sourceController:(UIViewController *)source
 {
+    _presenting = YES;
     return self;
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
 {
+    _presenting = NO;
     return self;
 }
 
@@ -205,8 +208,7 @@ static const CGFloat kDeep = 0.80;
     
     UIView *primaryView = self.fromViewController.view;
     
-    if ([[transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey]
-         isKindOfClass:[DMCustomModalViewController class]]) {
+    if (!self.isPresenting) {
         
         primaryView.transform =  CGAffineTransformScale(primaryView.transform, _parentViewScaling, _parentViewScaling);
         CGRect frame = primaryView.frame;
