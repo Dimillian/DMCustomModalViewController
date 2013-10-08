@@ -10,17 +10,17 @@
 		53595A8C1733E8E3002CBF6B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53595A8B1733E8E3002CBF6B /* UIKit.framework */; };
 		53595A8E1733E8E3002CBF6B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53595A8D1733E8E3002CBF6B /* Foundation.framework */; };
 		53595A901733E8E3002CBF6B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53595A8F1733E8E3002CBF6B /* CoreGraphics.framework */; };
-		53595A961733E8E3002CBF6B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 53595A941733E8E3002CBF6B /* InfoPlist.strings */; };
 		53595A981733E8E3002CBF6B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 53595A971733E8E3002CBF6B /* main.m */; };
 		53595A9C1733E8E3002CBF6B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 53595A9B1733E8E3002CBF6B /* AppDelegate.m */; };
 		53595A9E1733E8E3002CBF6B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 53595A9D1733E8E3002CBF6B /* Default.png */; };
 		53595AA01733E8E3002CBF6B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53595A9F1733E8E3002CBF6B /* Default@2x.png */; };
 		53595AA21733E8E3002CBF6B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 53595AA11733E8E3002CBF6B /* Default-568h@2x.png */; };
 		53595AA51733E8E3002CBF6B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53595AA41733E8E3002CBF6B /* ViewController.m */; };
-		53595AA81733E8E3002CBF6B /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53595AA61733E8E3002CBF6B /* ViewController.xib */; };
 		53595AB31733EA11002CBF6B /* ModalRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53595AB21733EA11002CBF6B /* ModalRootViewController.m */; };
-		53595AB71733EAAB002CBF6B /* DMCustomModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53595AB61733EAAB002CBF6B /* DMCustomModalViewController.m */; };
 		53595AB91733F043002CBF6B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53595AB81733F043002CBF6B /* QuartzCore.framework */; };
+		64FF11AD5A2E4646A9194F15 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B8A114268D34489991FF46E /* libPods.a */; };
+		9FB3C5B51804A2740048AC3C /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53595AA61733E8E3002CBF6B /* ViewController.xib */; };
+		9FB3C5B61804A2790048AC3C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 53595A941733E8E3002CBF6B /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,9 +42,9 @@
 		53595AA71733E8E3002CBF6B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
 		53595AB11733EA11002CBF6B /* ModalRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModalRootViewController.h; sourceTree = "<group>"; };
 		53595AB21733EA11002CBF6B /* ModalRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModalRootViewController.m; sourceTree = "<group>"; };
-		53595AB51733EAAB002CBF6B /* DMCustomModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DMCustomModalViewController.h; path = Classes/DMCustomModalViewController.h; sourceTree = "<group>"; };
-		53595AB61733EAAB002CBF6B /* DMCustomModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DMCustomModalViewController.m; path = Classes/DMCustomModalViewController.m; sourceTree = "<group>"; };
 		53595AB81733F043002CBF6B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		7B8A114268D34489991FF46E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA011D5E95324A8DBD83CF2F /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +56,7 @@
 				53595A8C1733E8E3002CBF6B /* UIKit.framework in Frameworks */,
 				53595A8E1733E8E3002CBF6B /* Foundation.framework in Frameworks */,
 				53595A901733E8E3002CBF6B /* CoreGraphics.framework in Frameworks */,
+				64FF11AD5A2E4646A9194F15 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,10 +66,10 @@
 		53595A7F1733E8E3002CBF6B = {
 			isa = PBXGroup;
 			children = (
-				53595AB41733EA7F002CBF6B /* DMCustomModalViewController */,
 				53595A911733E8E3002CBF6B /* Example */,
 				53595A8A1733E8E3002CBF6B /* Frameworks */,
 				53595A891733E8E3002CBF6B /* Products */,
+				BA011D5E95324A8DBD83CF2F /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -87,6 +88,7 @@
 				53595A8B1733E8E3002CBF6B /* UIKit.framework */,
 				53595A8D1733E8E3002CBF6B /* Foundation.framework */,
 				53595A8F1733E8E3002CBF6B /* CoreGraphics.framework */,
+				7B8A114268D34489991FF46E /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -121,15 +123,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		53595AB41733EA7F002CBF6B /* DMCustomModalViewController */ = {
-			isa = PBXGroup;
-			children = (
-				53595AB51733EAAB002CBF6B /* DMCustomModalViewController.h */,
-				53595AB61733EAAB002CBF6B /* DMCustomModalViewController.m */,
-			);
-			name = DMCustomModalViewController;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -137,9 +130,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 53595AAB1733E8E3002CBF6B /* Build configuration list for PBXNativeTarget "DMCustomModalViewController" */;
 			buildPhases = (
+				C7FDD592DCEB4ACA827459BC /* Check Pods Manifest.lock */,
 				53595A841733E8E3002CBF6B /* Sources */,
 				53595A851733E8E3002CBF6B /* Frameworks */,
 				53595A861733E8E3002CBF6B /* Resources */,
+				17DA36FCA88040B1A2B54F53 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -182,15 +177,48 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53595A961733E8E3002CBF6B /* InfoPlist.strings in Resources */,
+				9FB3C5B51804A2740048AC3C /* ViewController.xib in Resources */,
 				53595A9E1733E8E3002CBF6B /* Default.png in Resources */,
 				53595AA01733E8E3002CBF6B /* Default@2x.png in Resources */,
 				53595AA21733E8E3002CBF6B /* Default-568h@2x.png in Resources */,
-				53595AA81733E8E3002CBF6B /* ViewController.xib in Resources */,
+				9FB3C5B61804A2790048AC3C /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		17DA36FCA88040B1A2B54F53 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C7FDD592DCEB4ACA827459BC /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		53595A841733E8E3002CBF6B /* Sources */ = {
@@ -201,7 +229,6 @@
 				53595A9C1733E8E3002CBF6B /* AppDelegate.m in Sources */,
 				53595AA51733E8E3002CBF6B /* ViewController.m in Sources */,
 				53595AB31733EA11002CBF6B /* ModalRootViewController.m in Sources */,
-				53595AB71733EAAB002CBF6B /* DMCustomModalViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,6 +312,7 @@
 		};
 		53595AAC1733E8E3002CBF6B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA011D5E95324A8DBD83CF2F /* Pods.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer: Thomas Ricouard (7MB55D6BJ5)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -299,6 +327,7 @@
 		};
 		53595AAD1733E8E3002CBF6B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA011D5E95324A8DBD83CF2F /* Pods.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Thomas Ricouard";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
