@@ -20,6 +20,8 @@ static const CGFloat kDeep = 0.80;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panFullView;
 @property (nonatomic, strong) UINavigationBar *contentNavBar;
+@property (nonatomic) CGAffineTransform originalTransform;
+@property (nonatomic, getter = isPresenting) BOOL presenting;
 @property (nonatomic) CGPoint initialPoint;
 @property (nonatomic) DMCustomModalViewControllerPresentationStyle currentPresentationStyle;
 - (void)onTapGesture;
@@ -89,159 +91,21 @@ static const CGFloat kDeep = 0.80;
 - (void)presentRootViewControllerWithPresentationStyle:(DMCustomModalViewControllerPresentationStyle)presentationStyle
                                   controllercompletion:(void (^)(void))completion
 {
-    _currentPresentationStyle = presentationStyle;
-    UIView *primaryView = self.fromViewController.view;
-
-    void (^modifyAngle) (void) = ^{
-        _overlayView = [[UIView alloc]initWithFrame:primaryView.bounds];
-        [self.overlayView setBackgroundColor:[UIColor blackColor]];
-        [self.overlayView setAlpha:0.0];
-
-        if (presentationStyle == DMCustomModalViewControllerPresentFullScreen){
-            [primaryView addSubview:self.overlayView];
-        }
-        else{
-            [primaryView.window addSubview:self.overlayView];
-        }
-
-        CALayer *layer = primaryView.layer;
-        layer.zPosition = KZposition;
-        CATransform3D rotationAndPerspectiveTransform = layer.transform;
-        rotationAndPerspectiveTransform.m34 = 1.0 / -300;
-        layer.transform = CATransform3DRotate(rotationAndPerspectiveTransform,
-                                              2.0f * M_PI / 180.0f,
-                                              1.0f,
-                                              0.0f,
-                                              0.0f);
-
-
-        [self.overlayView setAlpha:0.2];
-        if (self.isTapParentViewToClose) {
-            _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTapGesture)];
-            [self.tapGesture setNumberOfTapsRequired:1],
-            [self.overlayView addGestureRecognizer:self.tapGesture];
-            [self.overlayView setUserInteractionEnabled:YES];
-        }
-    };
-
-    void (^scaleView) (void) = ^{
-        CGAffineTransform xForm = primaryView.transform;
-        primaryView.transform = CGAffineTransformScale(xForm, _parentViewScaling, _parentViewScaling);
-        CGRect frame = primaryView.frame;
-        frame.origin.y -= self.parentViewYPath;
-        [primaryView setFrame:frame];
-    };
-
-    primaryView.window.backgroundColor = [UIColor blackColor];
-    [UIView animateWithDuration:_animationSpeed
-                     animations:modifyAngle
-                     completion:^(BOOL finished) {
-                         if (finished) {
-                             [UIView animateWithDuration:_animationSpeed
-                                                   delay:0.0
-                                                 options:UIViewAnimationOptionCurveEaseIn
-                                              animations:scaleView
-                                              completion:NULL];
-                             void (^modalBlock) (void);
-                             if (presentationStyle == DMCustomModalViewControllerPresentFullScreen) {
-                                modalBlock = ^{
-                                     [self.fromViewController
-                                      presentViewController:self animated:YES completion:^{
-                                          completion();
-                                      }];
-                                 };
-                             }
-                             else if (presentationStyle == DMCustomModalViewControllerPresentPartScreen){
-                                 
-                                 modalBlock = ^{
-                                     self.fromViewController.modalPresentationStyle = UIModalPresentationCurrentContext;
-                                     [self.fromViewController
-                                      presentViewController:self animated:NO completion:^{
-                       
-                                      }];
-                                     __block CGRect frame = self.view.frame;
-                                     frame.origin.y = frame.size.height + 30;
-                                     [self.view setFrame:frame];
-                                     [UIView animateWithDuration:_animationSpeed animations:^{
-                                         frame.origin.y = frame.size.height - self.rootViewControllerHeight;
-                                         [self.view setFrame:frame];
-                                     }completion:^(BOOL finished) {
-                                        completion();
-                                     }];
-                                 };
-                             }
-                             
-                             dispatch_time_t modalDelay =
-                             dispatch_time(DISPATCH_TIME_NOW, 10000000);
-                             dispatch_after(modalDelay, dispatch_get_main_queue(), modalBlock);
-                             
-                         }
-                     }];
-
+    [self setCurrentPresentationStyle:presentationStyle];
+    [self setModalPresentationStyle:UIModalPresentationCustom];
+    [self setTransitioningDelegate:self];
+    
+    
+    [self.fromViewController presentViewController:self animated:YES completion:^{
+        completion();
+    }];
 }
 
 - (void)dismissRootViewControllerWithCompletion:(void (^)(void))completion
 {
-    UIView *primaryView = self.fromViewController.view;
-    void (^modifyAngle) (void) = ^{
-        CALayer *layer = primaryView.layer;
-        layer.zPosition = KZposition;
-        CATransform3D rotationAndPerspectiveTransform = layer.transform;
-        rotationAndPerspectiveTransform.m34 = 1.0 / 300;
-        layer.transform = CATransform3DRotate(rotationAndPerspectiveTransform,
-                                              -3.0f * M_PI / 180.0f,
-                                              1.0f,
-                                              0.0f,
-                                              0.0f);
-        
-    };
-    
-    void (^scaleView) (void) = ^{
-        [self.overlayView setAlpha:0.0];
-        primaryView.transform =  CGAffineTransformScale(primaryView.transform, 1.0, 1.0);
-        CGRect frame = primaryView.frame;
-        frame.origin.y += self.parentViewYPath;
-        [primaryView setFrame:frame];
-    };
-    
-    void (^animationBlock) (void) = ^{
-        [UIView animateWithDuration:_animationSpeed
-                              delay:0.05
-                            options:UIViewAnimationOptionCurveEaseIn
-                         animations:modifyAngle
-                         completion:^(BOOL finished) {
-                             [UIView animateWithDuration:_animationSpeed
-                                              animations:scaleView
-                                              completion:^(BOOL finished) {
-                                                  if (finished)
-                                                      [self.overlayView removeFromSuperview];
-                                                  self.fromViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-                                                  if ([self.delegate respondsToSelector:@selector(customModalViewControllerDidDismiss:)]) {
-                                                      [self.delegate customModalViewControllerDidDismiss:self];
-                                                  }
-                                                  completion();
-                                                  if (_closeCompletionBlock) {
-                                                      _closeCompletionBlock();
-                                                  }
-                                              }];
-                         }];
-        
-    };
-    
-    [self.fromViewController
-     dismissViewControllerAnimated:YES completion:^{
-         
-     }];
-    
-    if (_currentPresentationStyle == DMCustomModalViewControllerPresentFullScreen) {
-        primaryView.transform =  CGAffineTransformScale(primaryView.transform, _parentViewScaling, _parentViewScaling);
-    }
-    
-    dispatch_time_t modalDelay =
-    dispatch_time(DISPATCH_TIME_NOW, 20000000);
-    dispatch_after(modalDelay, dispatch_get_main_queue(), animationBlock);
-    
-
+    [self.fromViewController dismissViewControllerAnimated:YES completion:^{
+        completion();
+    }];
 }
 
 #pragma mark - setter
@@ -317,6 +181,168 @@ static const CGFloat kDeep = 0.80;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                  presentingController:(UIViewController *)presenting
+                                                                      sourceController:(UIViewController *)source
+{
+    _presenting = YES;
+    return self;
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
+{
+    _presenting = NO;
+    return self;
+}
+
+
+- (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
+    return self.animationSpeed;
+}
+
+
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
+    
+    NSTimeInterval duration = [self transitionDuration:transitionContext];
+    
+    UIView *primaryView = self.fromViewController.view;
+    
+    if (!self.isPresenting) {
+        
+        primaryView.transform = self.originalTransform;
+        
+        void (^modifyAngle) (void) = ^{
+            CALayer *layer = primaryView.layer;
+            layer.zPosition = KZposition;
+            CATransform3D rotationAndPerspectiveTransform = layer.transform;
+            rotationAndPerspectiveTransform.m34 = 1.0 / 300;
+            layer.transform = CATransform3DRotate(rotationAndPerspectiveTransform,
+                                                  -3.0f * M_PI / 180.0f,
+                                                  1.0f,
+                                                  0.0f,
+                                                  0.0f);
+            
+        };
+        
+        void (^scaleView) (void) = ^{
+            [self.overlayView setAlpha:0.0];
+            primaryView.transform =  CGAffineTransformScale(primaryView.transform, 1.0, 1.0);
+            CGRect frame = primaryView.frame;
+            frame.origin.y += self.parentViewYPath;
+            [primaryView setFrame:frame];
+        };
+        
+        void (^animationBlock) (void) = ^{
+            [UIView animateWithDuration:duration
+                                  delay:0.05
+                                options:UIViewAnimationOptionCurveEaseIn
+                             animations:modifyAngle
+                             completion:^(BOOL finished) {
+                                 [UIView animateWithDuration:duration
+                                                  animations:scaleView
+                                                  completion:^(BOOL finished) {
+                                                      if (finished)
+                                                          [self.overlayView removeFromSuperview];
+                                                      if ([self.delegate respondsToSelector:@selector(customModalViewControllerDidDismiss:)]) {
+                                                          [self.delegate customModalViewControllerDidDismiss:self];
+                                                      }
+                                                      if (_closeCompletionBlock) {
+                                                          _closeCompletionBlock();
+                                                      }
+                                                      [transitionContext completeTransition:YES];
+                                                  }];
+                             }];
+            
+        };
+
+        [UIView animateWithDuration:duration animations:^{
+            CGRect frame = self.view.frame;
+            frame.origin.y = frame.size.height;
+            [self.view setFrame:frame];
+        }];
+        
+        animationBlock();
+    }
+    else{
+        
+        CGRect frame = self.view.frame;
+        frame.origin.y = frame.size.height + 30;
+        [self.view setFrame:frame];
+        
+        void (^modifyAngle) (void) = ^{
+            _overlayView = [[UIView alloc]initWithFrame:primaryView.bounds];
+            [self.overlayView setBackgroundColor:[UIColor blackColor]];
+            [self.overlayView setAlpha:0.0];
+            
+            [[transitionContext containerView]addSubview:self.fromViewController.view];
+            [[transitionContext containerView]addSubview:self.overlayView];
+            [[transitionContext containerView]addSubview:self.view];
+            
+            CALayer *layer = primaryView.layer;
+            layer.zPosition = KZposition;
+            CATransform3D rotationAndPerspectiveTransform = layer.transform;
+            rotationAndPerspectiveTransform.m34 = 1.0 / -300;
+            layer.transform = CATransform3DRotate(rotationAndPerspectiveTransform,
+                                                  2.0f * M_PI / 180.0f,
+                                                  1.0f,
+                                                  0.0f,
+                                                  0.0f);
+            
+            
+            [self.overlayView setAlpha:0.2];
+            if (self.isTapParentViewToClose) {
+                _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTapGesture)];
+                [self.tapGesture setNumberOfTapsRequired:1],
+                [self.overlayView addGestureRecognizer:self.tapGesture];
+                [self.overlayView setUserInteractionEnabled:YES];
+            }
+        };
+        
+        void (^scaleView) (void) = ^{
+            CGAffineTransform xForm = primaryView.transform;
+            primaryView.transform = CGAffineTransformScale(xForm, _parentViewScaling, _parentViewScaling);
+            CGRect frame = primaryView.frame;
+            frame.origin.y -= self.parentViewYPath;
+            [primaryView setFrame:frame];
+            self.originalTransform = primaryView.transform;
+        };
+        
+        primaryView.window.backgroundColor = [UIColor blackColor];
+        [UIView animateWithDuration:duration
+                         animations:modifyAngle
+                         completion:^(BOOL finished) {
+                             if (finished) {
+                                 [UIView animateWithDuration:duration
+                                                       delay:0.0
+                                                     options:UIViewAnimationOptionCurveEaseIn
+                                                  animations:scaleView
+                                                  completion:NULL];
+                                 void (^modalBlock) (void);
+                                 
+                                 modalBlock = ^{
+                                     __block CGRect frame = self.view.frame;
+                                     frame.origin.y = frame.size.height - self.rootViewControllerHeight;
+                                     if (self.currentPresentationStyle == DMCustomModalViewControllerPresentFullScreen) {
+                                         frame.origin.y = 0;
+                                     }
+                                     [UIView animateWithDuration:duration animations:^{
+                        
+                                         [self.view setFrame:frame];
+                                     }completion:^(BOOL finished) {
+                                         [transitionContext completeTransition:YES];
+                                     }];
+                                 };
+                                 
+                                 dispatch_time_t modalDelay =
+                                 dispatch_time(DISPATCH_TIME_NOW, 10000000);
+                                 dispatch_after(modalDelay, dispatch_get_main_queue(), modalBlock);
+                                 
+                             }
+                         }];
+    }
+
 }
 
 @end
