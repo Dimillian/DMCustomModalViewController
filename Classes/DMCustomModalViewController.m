@@ -20,6 +20,7 @@ static const CGFloat kDeep = 0.80;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panFullView;
 @property (nonatomic, strong) UINavigationBar *contentNavBar;
+@property (nonatomic) CGAffineTransform originalTransform;
 @property (nonatomic, getter = isPresenting) BOOL presenting;
 @property (nonatomic) CGPoint initialPoint;
 @property (nonatomic) DMCustomModalViewControllerPresentationStyle currentPresentationStyle;
@@ -210,10 +211,7 @@ static const CGFloat kDeep = 0.80;
     
     if (!self.isPresenting) {
         
-        primaryView.transform =  CGAffineTransformScale(primaryView.transform, _parentViewScaling, _parentViewScaling);
-        CGRect frame = primaryView.frame;
-        frame.origin.y -= self.parentViewYPath;
-        [primaryView setFrame:frame];
+        primaryView.transform = self.originalTransform;
         
         void (^modifyAngle) (void) = ^{
             CALayer *layer = primaryView.layer;
@@ -308,6 +306,7 @@ static const CGFloat kDeep = 0.80;
             CGRect frame = primaryView.frame;
             frame.origin.y -= self.parentViewYPath;
             [primaryView setFrame:frame];
+            self.originalTransform = primaryView.transform;
         };
         
         primaryView.window.backgroundColor = [UIColor blackColor];
