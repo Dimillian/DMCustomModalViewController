@@ -4,6 +4,8 @@ DMCustomModalViewController is a  `UIViewController` subclass which take a root 
 
 You should not subclass it, it act as a container view controller that you can directly instantiate and use. 
 
+For iOS 7 and later
+
 ##Features
 
 `DMCustomModalViewController` provide a quick and an easy solution to display modal view controller with a nice animation. It have an option to display the modal view controller not full screen and keeping the current view controller in the background with a nice overlay on it. 
