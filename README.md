@@ -18,6 +18,14 @@ You should not subclass it, it act as a container view controller that you can d
 
 **TL;DR:** Look at the example provided. 
 
+###Cocoapods
+
+Add `pod DMCustomModalViewController` to your podfile
+
+###Run the example and install it manually
+
+Run `pod install`in the example folder
+
 1. Add DMCustomModalViewController.h and .m from the **classes/** folder to your Xcode project.
 2. Add QuartzCore.framework to "Link Binary With Libraries" (.xcodeproj -> Build Phases)
 3. Import `DMCustomModalViewController.h`where you want to use it. 
