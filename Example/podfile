@@ -1,2 +1,2 @@
 platform :ios, '7.0'
-pod 'DMCustomModalViewController', :git => 'https://github.com/Dimillian/DMCustomModalViewController.git'
+pod 'DMCustomModalViewController', :path => '../'

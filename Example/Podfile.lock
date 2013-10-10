@@ -1,14 +1,14 @@
 PODS:
-  - DMCustomModalViewController (1.0)
+  - DMCustomModalViewController (1.0.1)
 
 DEPENDENCIES:
-  - DMCustomModalViewController (from `https://github.com/Dimillian/DMCustomModalViewController.git`)
+  - DMCustomModalViewController (from `../`)
 
 EXTERNAL SOURCES:
   DMCustomModalViewController:
-    :git: https://github.com/Dimillian/DMCustomModalViewController.git
+    :path: ../
 
 SPEC CHECKSUMS:
-  DMCustomModalViewController: 32229eb1beddaba235f0dde9a680febba0dad223
+  DMCustomModalViewController: b8ac8e604cb49d9e21f65d120a72f214d71abbc5
 
 COCOAPODS: 0.25.0
