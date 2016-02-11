@@ -20,7 +20,7 @@ For iOS 7 and later
 
 **TL;DR:** Look at the example provided. 
 
-###Cocoapods
+###CocoaPods
 
 Add `pod DMCustomModalViewController` to your podfile
 
