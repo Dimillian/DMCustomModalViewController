@@ -6,7 +6,7 @@ You should not subclass it, it act as a container view controller that you can d
 
 For iOS 7 and later
 
-##Features
+## Features
 
 `DMCustomModalViewController` provide a quick and an easy solution to display modal view controller with a nice animation. It have an option to display the modal view controller not full screen and keeping the current view controller in the background with a nice overlay on it. 
 
@@ -16,15 +16,15 @@ For iOS 7 and later
 4. More to come.
 
 
-##How to use it
+## How to use it
 
 **TL;DR:** Look at the example provided. 
 
-###Cocoapods
+### Cocoapods
 
 Add `pod DMCustomModalViewController` to your podfile
 
-###Run the example and install it manually
+### Run the example and install it manually
 
 Run `pod install`in the example folder
 
@@ -32,7 +32,7 @@ Run `pod install`in the example folder
 2. Add QuartzCore.framework to "Link Binary With Libraries" (.xcodeproj -> Build Phases)
 3. Import `DMCustomModalViewController.h`where you want to use it. 
 
-###Full Screen
+### Full Screen
 
 	ModalRootViewController *root = [[ModalRootViewController alloc]initWithNibName:nil bundle:nil];
     _fullScreenModal = [[DMCustomModalViewController alloc]initWithRootViewController:root
@@ -42,7 +42,7 @@ Run `pod install`in the example folder
         
     }];
     
-###Part screen
+### Part screen
 
 ![image](https://raw.github.com/Dimillian/DMCustomModalViewController/master/screen1.png)
 
@@ -58,7 +58,7 @@ Run `pod install`in the example folder
     
 If you are not presenting it fullscreen you need to set the `rootViewControllerHeight` property. This value will be used to know how much of your `rootViewController` need to be displayed
 
-###Dismiss
+### Dismiss
 `DMCustomModalViewController` provide a built in category, just import the **.h** of `DMCustomModalViewController` in your `rootViewController` you passed to the instance of `DMCustomModalViewController`, you will have access to a new property `customModalViewController`. You can then freely dismiss the modal from itself. 
 
  	[self.customModalViewController dismissRootViewControllerWithcompletion:^{
@@ -69,7 +69,7 @@ If you are not presenting it fullscreen you need to set the `rootViewControllerH
 A better implementation would be to build yourself some `delegate` for your `rootViewController`, so the controller which fired the modal would be also responsible for dismissing it.
 	
 
-###Delegate
+### Delegate
 
 `DMCustomViewController` currently provide one delegate method to inform you when it was dismissed.
 
@@ -78,7 +78,7 @@ A better implementation would be to build yourself some `delegate` for your `roo
 	- (void)customModalViewControllerDidDismiss:(DMCustomModalViewController *)modalViewController;
 	@end
 
-###Customization
+### Customization
 You can customize the animation speed by setting the property `CGFloat animationSpeed` before presenting the modal view controller
 The default value is 0.30
 
